@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+
+  checkIns      WorkoutCheckIn[]
+  personalBests PersonalBest[]
+  progress      UserProgress?
+  activityLog   ActivityLog[]
+}
+
+model WorkoutCheckIn {
+  id        String   @id @default(cuid())
+  userId    String
+  date      String   // YYYY-MM-DD
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([userId])
+}
+
+model PersonalBest {
+  id        String   @id @default(cuid())
+  userId    String
+  liftName  String
+  value     Float
+  unit      String   @default("kg")
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, liftName])
+  @@index([userId])
+}
+
+model UserProgress {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  xp            Int      @default(0)
+  level         Int      @default(1)
+  currentStreak Int      @default(0)
+  longestStreak Int      @default(0)
+  totalWorkouts Int      @default(0)
+  avatarStage   Int      @default(1)
+  roomStage     Int      @default(1)
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String   // 'checkin' | 'pb_update' | 'level_up' | 'streak_milestone' | 'avatar_upgrade' | 'room_upgrade'
+  message   String
+  xpGained  Int?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}

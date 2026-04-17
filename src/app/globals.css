@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;600;700;900&family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #080810;
+  --color-panel: #0f0f1e;
+  --color-border: #252545;
+  --color-accent: #4cc9f0;
+  --color-gold: #ffd60a;
+  --color-pink: #f72585;
+  --color-green: #06d6a0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: #e8e8f0;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0f0f1e;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a4a;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a6a;
+}
+
+/* Pixel font utility */
+.font-pixel {
+  font-family: 'Press Start 2P', monospace;
+  image-rendering: pixelated;
+}
+
+.font-orbitron {
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* Game UI glow effects */
+.glow-blue {
+  text-shadow: 0 0 10px rgba(76, 201, 240, 0.8), 0 0 20px rgba(76, 201, 240, 0.4);
+}
+.glow-gold {
+  text-shadow: 0 0 10px rgba(255, 214, 10, 0.8), 0 0 20px rgba(255, 214, 10, 0.4);
+}
+.glow-pink {
+  text-shadow: 0 0 10px rgba(247, 37, 133, 0.8), 0 0 20px rgba(247, 37, 133, 0.4);
+}
+.glow-green {
+  text-shadow: 0 0 10px rgba(6, 214, 160, 0.8), 0 0 20px rgba(6, 214, 160, 0.4);
+}
+
+/* Scan line overlay effect */
+.scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.03) 2px,
+    rgba(0, 0, 0, 0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Game panel style */
+.game-panel {
+  background: linear-gradient(135deg, #0f0f1e 0%, #14142a 100%);
+  border: 1px solid #252545;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.game-panel-gold {
+  background: linear-gradient(135deg, #1a1500 0%, #2a2000 100%);
+  border: 1px solid #3a3000;
+  box-shadow: 0 0 20px rgba(255, 214, 10, 0.1), 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* XP bar animation */
+.xp-bar-fill {
+  background: linear-gradient(90deg, #f72585 0%, #7209b7 50%, #4cc9f0 100%);
+  background-size: 200% 100%;
+  animation: xpShimmer 2s linear infinite;
+}
+
+@keyframes xpShimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* Room SVG styling */
+.room-container {
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
+}
+
+/* Pixel art rendering */
+.pixel-art {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Check-in button */
+.checkin-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.checkin-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Particle burst container */
+.particle-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Toast-style notifications */
+.game-toast {
+  backdrop-filter: blur(10px);
+  background: rgba(15, 15, 30, 0.95);
+  border: 1px solid rgba(76, 201, 240, 0.3);
+}
+
+/* Input styling */
+.game-input {
+  background: rgba(15, 15, 30, 0.8);
+  border: 1px solid #252545;
+  color: #e8e8f0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.game-input:focus {
+  outline: none;
+  border-color: #4cc9f0;
+  box-shadow: 0 0 0 2px rgba(76, 201, 240, 0.15);
+}
+.game-input::placeholder {
+  color: #4a4a6a;
+}
+
+/* Calendar grid */
+.calendar-day {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  transition: transform 0.1s;
+}
+.calendar-day:hover {
+  transform: scale(1.2);
+}
