@@ -18,6 +18,10 @@ the cron handle backfill days.
 - **Monetization**: Beehiiv paid tiers + Boosts + affiliate links
 - **Free SEO traffic**: every issue auto-publishes to a GitHub Pages archive
 
+📦 **Ready-to-paste content:** see **[`content/`](./content/)** — sample issue,
+welcome emails, first Prompt Pack, lead magnet, paid-tier launch email, and a
+pre-launch checklist. Written ahead so setup is copy-paste, not write-then-decide.
+
 ---
 
 ## One-time setup (~20 minutes)
