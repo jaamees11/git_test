@@ -108,7 +108,7 @@ No code changes needed for tuning.
 ```
 .
 ├── .github/workflows/
-│   ├── publish.yml                 # daily news digest cron (06:30 UTC)
+│   ├── publish.yml                 # daily news digest + Pages deploy (06:30 UTC)
 │   ├── prompt_pack.yml             # weekly paid Prompt Pack (Fri 14:00 UTC)
 │   └── test.yml                    # CI: pytest on every push
 ├── config/
@@ -131,17 +131,62 @@ No code changes needed for tuning.
 │   │   ├── llm_clients.py          # Gemini → Groq → None
 │   │   ├── extractive.py           # zero-API fallback
 │   │   └── rewrite.py              # orchestrates rewriting
-│   └── publisher/
-│       ├── renderer.py             # sections → HTML email
-│       ├── subject.py              # data-driven subject lines
-│       ├── affiliates.py           # auto-injects ?ref= codes
-│       └── beehiiv_client.py       # creates draft post
-├── tests/                          # pytest suite (23 tests)
+│   ├── publisher/
+│   │   ├── renderer.py             # sections → HTML email
+│   │   ├── subject.py              # data-driven subject lines
+│   │   ├── affiliates.py           # auto-injects ?ref= codes
+│   │   └── beehiiv_client.py       # creates draft post
+│   ├── site/
+│   │   └── render.py               # static archive → GitHub Pages
+│   └── social/
+│       └── snippets.py             # X/LinkedIn/Reddit share text
+├── tests/                          # pytest suite (32 tests)
 ├── requirements.txt
 └── README.md
 ```
 
 ---
+
+## Public archive site (free SEO traffic engine)
+
+Each daily issue is also rendered as a static page and published to GitHub
+Pages. Over time this becomes a long-tail traffic source — Google indexes every
+issue, each page has a subscribe CTA, RSS, and JSON-LD structured data.
+
+**One-time setup (5 min):**
+
+1. Repo → **Settings → Pages** → set Source to **GitHub Actions**.
+2. Repo → **Settings → Secrets and variables → Actions → Variables tab** → add
+   these **repository variables** (not secrets):
+   - `SITE_URL` = `https://<your-username>.github.io/git_test` (or your custom
+     domain)
+   - `SUBSCRIBE_URL` = your Beehiiv subscribe page URL
+     (e.g. `https://aipulse.beehiiv.com/subscribe`)
+   - `TWITTER_HANDLE` = your X handle without the @ (optional)
+3. Run the daily workflow once. After it finishes, the deploy-pages job
+   publishes the archive to your `SITE_URL`.
+
+The archive carries forward across runs (the previous build is restored before
+the new issue is added). After 30 days you'll have ~30 indexed pages of
+high-intent content.
+
+## Share snippets (paste-and-post growth)
+
+Every daily run also writes three Markdown files to `.cache/`:
+
+```
+.cache/share-x-YYYYMMDD-HHMM.md          # X/Twitter (≤270 chars)
+.cache/share-linkedin-YYYYMMDD-HHMM.md   # LinkedIn (3-5 bullets + CTA)
+.cache/share-reddit-YYYYMMDD-HHMM.md     # Reddit title + body + suggested subs
+```
+
+These are uploaded as a workflow artifact each day. Open the run, download the
+artifact, and paste each one into the relevant platform. Takes about 2 min/day
+and is the fastest way to grow from 0 → 500 subs.
+
+(Why not auto-post? X charges $100/mo for the basic API; manual posting is more
+reliable for the first few hundred subs anyway. We can switch to automated
+posting later via the LinkedIn/Reddit free APIs once you've validated.)
 
 ## Affiliate links (passive revenue layer)
 

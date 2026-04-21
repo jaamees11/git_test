@@ -5,6 +5,7 @@ or via GitHub Actions (see .github/workflows/publish.yml).
 """
 import argparse
 import json
+import os
 from pathlib import Path
 
 from .models import Item
@@ -14,6 +15,8 @@ from .publisher.renderer import build_issue
 from .rewriter.rewrite import rewrite_all
 from .scrapers import github_trending, hackernews, product_hunt, rss_feeds
 from .scrapers.ranker import dedupe, score
+from .site.render import write_static_site
+from .social.snippets import write_all as write_share_snippets
 from .utils import CACHE_DIR, get_logger, load_yaml, now_utc
 
 log = get_logger(__name__)
@@ -85,6 +88,38 @@ def main(dry_run: bool = False, output_path: str | None = None) -> int:
         ),
         encoding="utf-8",
     )
+
+    style_cfg = load_yaml("style.yaml").get("newsletter") or {}
+    site_url = (os.getenv("SITE_URL") or style_cfg.get("site_url") or "").strip()
+    subscribe_url = (os.getenv("SUBSCRIBE_URL") or style_cfg.get("subscribe_url") or "").strip()
+    twitter_handle = (os.getenv("TWITTER_HANDLE") or style_cfg.get("twitter_handle") or "").strip()
+
+    issue_url: str | None = None
+    if site_url:
+        site_info = write_static_site(
+            issue_title=issue["title"],
+            issue_subtitle=issue["subtitle"],
+            body_html=issue["body_content"],
+            site_name=pub_name,
+            site_tagline=style_cfg.get("tagline", ""),
+            site_url=site_url,
+            subscribe_url=subscribe_url or None,
+            twitter_handle=twitter_handle or None,
+            published=now_utc(),
+        )
+        issue_url = site_info["url"]
+        log.info("Static site updated: %s", issue_url)
+    else:
+        log.info("SITE_URL not set — skipping static archive (set it in env or style.yaml)")
+
+    write_share_snippets(
+        rewritten,
+        cache_dir=CACHE_DIR,
+        issue_url=issue_url,
+        publication_name=pub_name,
+        stamp=stamp,
+    )
+    log.info("Share snippets written to .cache/share-*-%s.md", stamp)
 
     if dry_run:
         log.info("Dry run — skipping Beehiiv publish.")

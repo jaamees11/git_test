@@ -3,6 +3,11 @@ newsletter:
   tagline: "Your daily signal in the AI noise."
   sender_voice: "Sharp, skimmable, lightly witty. No hype, no hedging. Short sentences."
   target_reader: "Builders, PMs, and curious pros who want the 5 AI things that matter today."
+  # Fill these in once you have them. The static site & share snippets use them.
+  # You can also override with env vars: SITE_URL, SUBSCRIBE_URL, TWITTER_HANDLE.
+  site_url: ""              # e.g. "https://jaamees11.github.io/git_test"
+  subscribe_url: ""         # your Beehiiv subscribe page URL
+  twitter_handle: ""        # without the @, e.g. "ai_pulse"
   max_items_per_section: 5
   sections:
     - key: fresh_tools
