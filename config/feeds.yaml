@@ -1,0 +1,85 @@
+rss_feeds:
+  - name: Anthropic News
+    url: https://www.anthropic.com/news/rss.xml
+    category: lab
+  - name: OpenAI Blog
+    url: https://openai.com/blog/rss.xml
+    category: lab
+  - name: Google DeepMind
+    url: https://deepmind.google/blog/rss.xml
+    category: lab
+  - name: Hugging Face Blog
+    url: https://huggingface.co/blog/feed.xml
+    category: lab
+  - name: Meta AI
+    url: https://ai.meta.com/blog/rss/
+    category: lab
+  - name: Mistral AI News
+    url: https://mistral.ai/news/rss.xml
+    category: lab
+  - name: arXiv cs.AI
+    url: http://export.arxiv.org/rss/cs.AI
+    category: research
+  - name: arXiv cs.LG
+    url: http://export.arxiv.org/rss/cs.LG
+    category: research
+  - name: arXiv cs.CL
+    url: http://export.arxiv.org/rss/cs.CL
+    category: research
+  - name: TechCrunch AI
+    url: https://techcrunch.com/category/artificial-intelligence/feed/
+    category: news
+  - name: The Verge AI
+    url: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
+    category: news
+  - name: VentureBeat AI
+    url: https://venturebeat.com/category/ai/feed/
+    category: news
+  - name: MIT Technology Review AI
+    url: https://www.technologyreview.com/topic/artificial-intelligence/feed
+    category: news
+  - name: Simon Willison
+    url: https://simonwillison.net/atom/everything/
+    category: commentary
+  - name: Latent Space
+    url: https://www.latent.space/feed
+    category: commentary
+  - name: Ben's Bites
+    url: https://bensbites.beehiiv.com/feed
+    category: newsletter
+  - name: Import AI
+    url: https://importai.substack.com/feed
+    category: newsletter
+
+github_trending:
+  languages: [python, typescript, jupyter-notebook]
+  since: daily
+  min_stars_today: 50
+
+hackernews:
+  query: "AI OR LLM OR \"GPT\" OR Claude OR Gemini"
+  min_points: 100
+  lookback_hours: 36
+
+product_hunt:
+  topics: [artificial-intelligence, developer-tools, productivity]
+  lookback_hours: 36
+
+keywords_boost:
+  - llm
+  - gpt
+  - claude
+  - gemini
+  - agent
+  - rag
+  - fine-tune
+  - open source
+  - multimodal
+  - benchmark
+  - release
+
+keywords_filter_out:
+  - crypto
+  - nft
+  - web3
+  - casino

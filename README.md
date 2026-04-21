@@ -1,1 +1,170 @@
-# git_test
+# AI Pulse
+
+A **fully automated freemium AI newsletter** that scrapes the day's biggest AI
+launches and news, rewrites the blurbs with a free-tier LLM (or a zero-API
+extractive fallback), and drops a **draft** into your Beehiiv account every day
+for one-click review and send.
+
+- **Runs on**: GitHub Actions (free)
+- **LLM cost**: $0 — Gemini free tier, Groq free tier, extractive fallback
+- **Scrape sources**: RSS (Anthropic, OpenAI, DeepMind, HF, arXiv, TC, Verge…),
+  Hacker News (Algolia), GitHub Trending, Product Hunt
+- **Monetization**: Beehiiv paid tiers + Boosts + affiliate links
+
+---
+
+## One-time setup (~20 minutes)
+
+### 1. Create a Beehiiv publication
+1. Sign up at <https://www.beehiiv.com>.
+2. Create a publication (name it whatever — e.g. "AI Pulse").
+3. Go to **Settings → Integrations → API** and click **Create API Key**.
+   - Copy the key. You'll paste it into GitHub Secrets below.
+4. Find your **Publication ID**: Settings → Integrations → API shows it, or grab
+   it from the URL when editing a post (`pub_...`).
+5. (Later, when you're ready to charge) Settings → Paid Subscriptions → connect
+   Stripe. Set a tier like $9/mo. Don't enable it on day one — build list first.
+
+### 2. Get a free Gemini API key (primary rewriter)
+1. Go to <https://aistudio.google.com/apikey>.
+2. Click **Create API key** → pick any Google Cloud project (or the default).
+3. Copy the key. Free tier = 1,500 requests/day, which is plenty.
+
+### 3. Get a free Groq API key (backup rewriter)
+1. Go to <https://console.groq.com/keys>.
+2. Sign in → **Create API Key** → copy it.
+3. Free tier = generous daily limits on Llama 3.3 70B.
+
+### 4. Add secrets to this GitHub repo
+Go to **Settings → Secrets and variables → Actions → New repository secret**
+and add these four:
+
+| Name | Value |
+|---|---|
+| `BEEHIIV_API_KEY` | from step 1 |
+| `BEEHIIV_PUBLICATION_ID` | from step 1 (looks like `pub_xxxxxxxx-xxxx-...`) |
+| `GEMINI_API_KEY` | from step 2 |
+| `GROQ_API_KEY` | from step 3 |
+
+### 5. Turn on the workflow
+1. Go to the **Actions** tab in this repo.
+2. Enable workflows if prompted.
+3. Find **AI Pulse — build & publish draft** → **Run workflow** (manual) to
+   smoke-test it. First run should produce a draft in your Beehiiv dashboard.
+4. After that, the cron runs every day at 06:30 UTC. Change the schedule in
+   `.github/workflows/publish.yml` if you want a different time.
+
+---
+
+## Your daily workflow (< 2 min/day — or zero)
+
+1. GitHub Actions runs at 06:30 UTC, scrapes, rewrites, creates a **draft** in
+   Beehiiv.
+2. You get a Beehiiv notification.
+3. Open Beehiiv → glance at the draft → click **Send**.
+4. That's it.
+
+**Want true zero-touch?** Beehiiv supports scheduled auto-send from drafts; you
+can also change `"status": "draft"` to `"status": "confirmed"` in
+`pipeline/publisher/beehiiv_client.py` once you trust the output.
+
+---
+
+## Run it locally
+
+```bash
+pip install -r requirements.txt
+
+# Dry run — scrapes, rewrites, writes a preview HTML to .cache/, no publish
+python -m pipeline.run --dry-run
+
+# Full run — requires env vars set (same 4 as above)
+export BEEHIIV_API_KEY=...
+export BEEHIIV_PUBLICATION_ID=...
+export GEMINI_API_KEY=...
+export GROQ_API_KEY=...
+python -m pipeline.run
+```
+
+Output previews end up in `.cache/issue-YYYYMMDD-HHMM.html` and `.json`.
+
+---
+
+## Tuning the newsletter
+
+Everything you'll want to change is in `config/`:
+
+- **`config/feeds.yaml`** — RSS sources, keyword boost/block lists, HN/PH/GH
+  thresholds. Add/remove feeds here.
+- **`config/style.yaml`** — newsletter name, tagline, voice, sections, paid
+  teaser, and the LLM rewrite prompt. Change "AI Pulse" to your brand.
+
+No code changes needed for tuning.
+
+---
+
+## Project structure
+
+```
+.
+├── .github/workflows/publish.yml   # daily cron
+├── config/
+│   ├── feeds.yaml                  # sources + keyword rules
+│   └── style.yaml                  # branding + rewrite prompt
+├── pipeline/
+│   ├── run.py                      # orchestrator
+│   ├── models.py                   # Item dataclass
+│   ├── utils.py                    # logging, yaml, helpers
+│   ├── scrapers/
+│   │   ├── rss_feeds.py
+│   │   ├── hackernews.py           # HN Algolia
+│   │   ├── github_trending.py      # HTML scrape (no API)
+│   │   ├── product_hunt.py         # HTML scrape (no API)
+│   │   └── ranker.py               # dedupe + score
+│   ├── rewriter/
+│   │   ├── llm_clients.py          # Gemini → Groq → None
+│   │   ├── extractive.py           # zero-API fallback
+│   │   └── rewrite.py              # orchestrates rewriting
+│   └── publisher/
+│       ├── renderer.py             # sections → HTML email
+│       └── beehiiv_client.py       # creates draft post
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## Roadmap (cheap wins, in order)
+
+1. **Growth**: enable Beehiiv Boosts (paid cross-promo, revenue-positive).
+2. **Affiliates**: add affiliate IDs for Perplexity Pro, ElevenLabs, Notion AI,
+   etc. Auto-append `?ref=` to matching URLs in the renderer.
+3. **Weekly Prompt Pack**: second workflow (`cron: "0 14 * * 5"`) that renders a
+   paid-only post. Uses the same pipeline with a different `style.yaml`.
+4. **Searchable archive**: Beehiiv has this built-in — gate it to paid tier.
+5. **Flip on paid tier** once you hit ~500 subs. At 3–5% conversion that's
+   $135–225/mo; grows linearly from there.
+
+---
+
+## Costs
+
+| Phase | Subs | Monthly cost |
+|---|---|---|
+| Launch | 0–2,500 | **$0** |
+| Growth | 2,500–10k | $39 (Beehiiv Scale) |
+| Scale | 10k+ | $79+ (Beehiiv Max) |
+
+Break-even on Beehiiv Scale: ~5 paid subs. Easy target.
+
+---
+
+## Troubleshooting
+
+- **Draft didn't appear in Beehiiv**: check the Actions run logs. 401 = bad key;
+  404 = wrong publication ID; 422 = Beehiiv rejected content (often fixable by
+  shortening or re-running).
+- **Blurbs look dry**: you're probably hitting the extractive fallback. Verify
+  `GEMINI_API_KEY` is set in Secrets and hasn't hit the daily quota.
+- **Scrape returns nothing**: sites change HTML. Run `python -m pipeline.scrapers.product_hunt`
+  to debug individually. RSS + HN are the most stable sources.

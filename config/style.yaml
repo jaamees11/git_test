@@ -1,0 +1,34 @@
+newsletter:
+  name: AI Pulse
+  tagline: "Your daily signal in the AI noise."
+  sender_voice: "Sharp, skimmable, lightly witty. No hype, no hedging. Short sentences."
+  target_reader: "Builders, PMs, and curious pros who want the 5 AI things that matter today."
+  max_items_per_section: 5
+  sections:
+    - key: fresh_tools
+      title: "🚀 Fresh Tools"
+      subtitle: "What launched in the last 24h"
+      sources: [product_hunt, github_trending, hackernews]
+      item_format: "bold_name_then_blurb"
+    - key: news_deep_dive
+      title: "📰 Signal, Not Noise"
+      subtitle: "Releases, papers, moves"
+      sources: [rss_feeds]
+      item_format: "headline_then_blurb"
+  paid_tier_teaser: "💎 Paid subs get the weekly Prompt Pack every Friday + searchable archive. Upgrade →"
+  footer: "AI Pulse — built by a human who got tired of scrolling for this stuff."
+
+rewrite:
+  max_blurb_tokens: 60
+  max_blurb_chars: 280
+  rewrite_prompt_template: |
+    Rewrite this AI-news blurb for the "AI Pulse" newsletter.
+    Voice: sharp, skimmable, no hype, no hedging. Max 2 sentences, under 280 characters.
+    Lead with the concrete thing (who, what, number). Skip fluff like "revolutionary" or "game-changing".
+    Preserve factual specifics (model names, metrics, prices).
+
+    Title: {title}
+    Source: {source}
+    Original blurb: {content}
+
+    Output just the rewritten blurb, nothing else.
