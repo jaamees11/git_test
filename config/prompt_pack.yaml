@@ -1,0 +1,79 @@
+# Weekly Prompt Pack — paid-tier content.
+# Each Friday the workflow picks a theme (rotates), asks the LLM to generate
+# 5 ready-to-use prompts for that theme, and ships them as a paid-only post.
+
+newsletter:
+  name: AI Pulse — Prompt Pack
+  tagline: "5 paste-ready prompts you'll actually use this week."
+  footer: "Want more? Reply with a job-to-be-done and I'll build prompts for it next week."
+
+# Themes rotate through this list — picked by ISO week number.
+themes:
+  - name: "Inbox triage"
+    audience: "anyone with a busy email account"
+    use_cases:
+      - "summarize a 30-message thread into 5 bullets + an open question"
+      - "draft a polite decline to a sales pitch"
+      - "extract every action item across the last week of emails"
+      - "rewrite an angry reply you actually want to send"
+      - "categorize an inbox dump into urgent / FYI / archive"
+  - name: "Meeting alchemy"
+    audience: "PMs, leads, and consultants"
+    use_cases:
+      - "turn a transcript into a one-page recap for execs"
+      - "extract decisions, owners, and dates from messy notes"
+      - "draft a 24-hour follow-up email per attendee"
+      - "spot risks and unknowns the room avoided"
+      - "build the agenda for the follow-up meeting"
+  - name: "Deep research"
+    audience: "founders, analysts, students"
+    use_cases:
+      - "compare 3 competitors on price, features, and reviews"
+      - "synthesize 10 sources into a 500-word brief with citations"
+      - "find counter-arguments to a hypothesis you're attached to"
+      - "translate jargon-heavy paper into 5 plain bullets"
+      - "build a research plan with sources before you start"
+  - name: "Writing on rails"
+    audience: "marketers, founders, blog-curious devs"
+    use_cases:
+      - "turn a Twitter thread into a 600-word LinkedIn post"
+      - "tighten a draft by 30% without losing voice"
+      - "generate 10 hook variations for the same idea"
+      - "audit your post for hype and hedging"
+      - "outline a newsletter from a single observation"
+  - name: "Code review co-pilot"
+    audience: "developers"
+    use_cases:
+      - "explain this diff to me as if I haven't seen the codebase"
+      - "find the 3 highest-risk lines and why"
+      - "suggest 2 missing tests with rationale"
+      - "rewrite this function for clarity, keep behavior identical"
+      - "produce a changelog entry from this commit range"
+
+generation:
+  prompt_template: |
+    You are writing a paid-tier "Prompt Pack" for the newsletter "AI Pulse".
+    Theme: {theme}
+    Audience: {audience}
+    Use cases (one prompt each):
+    {use_cases}
+
+    For each use case, write ONE high-quality, paste-ready prompt that the
+    reader can drop into Claude/ChatGPT/Gemini and immediately get value from.
+
+    Rules:
+      - Open the prompt with the role and goal in one short line.
+      - Include 1-2 placeholder variables in {{double-curly-brace}} format
+        (e.g. {{thread}}, {{transcript}}, {{draft}}).
+      - State the desired output format explicitly (bullets, headings, table).
+      - Add a single short "why this works" line after each prompt.
+      - No fluff, no preamble, no closing summary. Just the 5 prompts.
+
+    Output format (markdown):
+      ## 1. <one-line title>
+      ```
+      <the prompt itself>
+      ```
+      Why this works: <one sentence>
+
+      ## 2. ...

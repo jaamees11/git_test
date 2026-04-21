@@ -1,0 +1,28 @@
+# Affiliate program registry.
+# Add a row when you sign up for a program. Code reads this at runtime — no
+# Python changes needed. Match is on the URL host.
+#
+# `param`: query-param key the program expects (e.g. ?ref=, ?via=, ?aff=)
+# `code`: your unique tracking code for that program
+# `notes`: just for you, never rendered
+#
+# Tip: most affiliate programs are free to join and pay 20-30% recurring.
+
+programs:
+  # Examples — replace with your real codes once you've signed up.
+  # - host: perplexity.ai
+  #   param: referrer
+  #   code: YOUR_CODE_HERE
+  #   notes: "Perplexity Pro affiliate"
+  # - host: elevenlabs.io
+  #   param: from
+  #   code: YOUR_CODE_HERE
+  #   notes: "11Labs - 22% recurring"
+  # - host: notion.so
+  #   param: ref
+  #   code: YOUR_CODE_HERE
+  #   notes: "Notion AI"
+  # - host: beehiiv.com
+  #   param: via
+  #   code: YOUR_CODE_HERE
+  #   notes: "Meta-affiliate, recommend Beehiiv to other writers"

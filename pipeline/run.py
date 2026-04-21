@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 
 from .models import Item
+from .publisher import affiliates, subject
 from .publisher.beehiiv_client import create_draft
 from .publisher.renderer import build_issue
 from .rewriter.rewrite import rewrite_all
@@ -56,7 +57,14 @@ def main(dry_run: bool = False, output_path: str | None = None) -> int:
     log.info("After rank/dedupe/cap: %d items", len(capped))
 
     rewritten = rewrite_all(capped)
+    affiliates.apply_to_items(rewritten)
+
+    pub_name = (load_yaml("style.yaml").get("newsletter") or {}).get("name", "AI Pulse")
+    subject_line = subject.best(rewritten, publication_name=pub_name)
+    log.info("Subject: %s", subject_line)
+
     issue = build_issue(rewritten)
+    issue["title"] = subject_line
 
     stamp = now_utc().strftime("%Y%m%d-%H%M")
     preview_path = Path(output_path) if output_path else CACHE_DIR / f"issue-{stamp}.html"

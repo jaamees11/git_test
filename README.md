@@ -107,12 +107,18 @@ No code changes needed for tuning.
 
 ```
 .
-├── .github/workflows/publish.yml   # daily cron
+├── .github/workflows/
+│   ├── publish.yml                 # daily news digest cron (06:30 UTC)
+│   ├── prompt_pack.yml             # weekly paid Prompt Pack (Fri 14:00 UTC)
+│   └── test.yml                    # CI: pytest on every push
 ├── config/
 │   ├── feeds.yaml                  # sources + keyword rules
-│   └── style.yaml                  # branding + rewrite prompt
+│   ├── style.yaml                  # branding + rewrite prompt
+│   ├── affiliates.yaml             # affiliate program codes
+│   └── prompt_pack.yaml            # paid-tier theme rotation + prompt
 ├── pipeline/
-│   ├── run.py                      # orchestrator
+│   ├── run.py                      # daily orchestrator
+│   ├── prompt_pack.py              # weekly Prompt Pack generator
 │   ├── models.py                   # Item dataclass
 │   ├── utils.py                    # logging, yaml, helpers
 │   ├── scrapers/
@@ -127,22 +133,41 @@ No code changes needed for tuning.
 │   │   └── rewrite.py              # orchestrates rewriting
 │   └── publisher/
 │       ├── renderer.py             # sections → HTML email
+│       ├── subject.py              # data-driven subject lines
+│       ├── affiliates.py           # auto-injects ?ref= codes
 │       └── beehiiv_client.py       # creates draft post
+├── tests/                          # pytest suite (23 tests)
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
+## Affiliate links (passive revenue layer)
+
+Open `config/affiliates.yaml` and add a row each time you sign up for an
+affiliate program (Perplexity, ElevenLabs, Notion, Beehiiv-meta, etc.). The
+publisher auto-appends your tracking param to any outbound link whose host
+matches. No code changes needed — examples are commented in the file.
+
+## Weekly Prompt Pack (paid-tier content)
+
+`pipeline/prompt_pack.py` runs every Friday via
+`.github/workflows/prompt_pack.yml`. It rotates through 5 themes (Inbox triage,
+Meeting alchemy, Deep research, Writing on rails, Code review co-pilot) and
+generates 5 paste-ready prompts per issue using the same free-tier LLM stack.
+
+Once you flip on the Beehiiv paid tier, mark this post as paid-only in the
+Beehiiv UI (or set the post audience via API). Subscribers who don't pay see
+a teaser; payers see the full pack.
+
 ## Roadmap (cheap wins, in order)
 
 1. **Growth**: enable Beehiiv Boosts (paid cross-promo, revenue-positive).
-2. **Affiliates**: add affiliate IDs for Perplexity Pro, ElevenLabs, Notion AI,
-   etc. Auto-append `?ref=` to matching URLs in the renderer.
-3. **Weekly Prompt Pack**: second workflow (`cron: "0 14 * * 5"`) that renders a
-   paid-only post. Uses the same pipeline with a different `style.yaml`.
-4. **Searchable archive**: Beehiiv has this built-in — gate it to paid tier.
-5. **Flip on paid tier** once you hit ~500 subs. At 3–5% conversion that's
+2. **Affiliates**: fill in `config/affiliates.yaml` with your codes — instant
+   passive revenue from existing newsletter clicks.
+3. **Searchable archive**: Beehiiv has this built-in — gate it to paid tier.
+4. **Flip on paid tier** once you hit ~500 subs. At 3–5% conversion that's
    $135–225/mo; grows linearly from there.
 
 ---
