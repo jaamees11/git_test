@@ -19,6 +19,9 @@ Beehiiv, social platforms, or your Stripe product descriptions. No code.
    — the gated signup asset you share on social to pull people onto the list.
 6. **[`PAID-TIER-LAUNCH.md`](./PAID-TIER-LAUNCH.md)** — the email to send
    when you flip on paid subscriptions (~500 subs from now).
+7. **[`COMPETITIVE-LANDSCAPE.md`](./COMPETITIVE-LANDSCAPE.md)** — who else
+   is in this market, their subscriber counts, pricing, and revenue at
+   each stage. Reference this before any strategic pivot.
 
 ## Not in this folder (but worth knowing about)
 
