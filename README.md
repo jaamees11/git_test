@@ -1,15 +1,22 @@
 # AI Pulse
 
-A **fully automated freemium AI newsletter** that scrapes the day's biggest AI
-launches and news, rewrites the blurbs with a free-tier LLM (or a zero-API
-extractive fallback), and drops a **draft** into your Beehiiv account every day
-for one-click review and send.
+A **freemium AI newsletter** that scrapes the day's biggest AI launches and
+news, rewrites blurbs, and drops a **draft** into Beehiiv for one-click send.
 
-- **Runs on**: GitHub Actions (free)
-- **LLM cost**: $0 — Gemini free tier, Groq free tier, extractive fallback
+Two modes — you pick per issue:
+
+| Mode | Who writes blurbs | Cost | Best for |
+|---|---|---|---|
+| **Claude-in-session** (recommended) | Claude Pro/Max (you prompt me in Claude Code) | $0 | Weekly high-quality issues |
+| **Fully automated** | Gemini/Groq free tier via GitHub Actions cron | $0 | Daily autopilot when you're away |
+
+Both can coexist. Run the manual flow when you want Claude-quality copy; let
+the cron handle backfill days.
+
 - **Scrape sources**: RSS (Anthropic, OpenAI, DeepMind, HF, arXiv, TC, Verge…),
-  Hacker News (Algolia), GitHub Trending, Product Hunt
+  Hacker News, GitHub Trending, Product Hunt
 - **Monetization**: Beehiiv paid tiers + Boosts + affiliate links
+- **Free SEO traffic**: every issue auto-publishes to a GitHub Pages archive
 
 ---
 
@@ -56,13 +63,33 @@ and add these four:
 
 ---
 
-## Your daily workflow (< 2 min/day — or zero)
+## Mode 1 — Claude-in-session (recommended for weekly issues)
 
-1. GitHub Actions runs at 06:30 UTC, scrapes, rewrites, creates a **draft** in
-   Beehiiv.
-2. You get a Beehiiv notification.
-3. Open Beehiiv → glance at the draft → click **Send**.
-4. That's it.
+This is how you use your existing Claude Pro/Max subscription to ship issues
+without paying for any LLM APIs. The full playbook is in
+[`CLAUDE.md`](./CLAUDE.md) — any Claude Code session reads it automatically.
+
+**Your workflow (~10 min/week):**
+1. Open Claude Code in this repo.
+2. Say: *"Ship this week's AI Pulse issue"*.
+3. Claude will:
+   - Run `python -m pipeline.run --collect-only` (scrape + rank + dedupe)
+   - Read the draft JSON (~30 items)
+   - Rewrite each blurb in this conversation (sharp, skimmable, no hype)
+   - Run `python -m pipeline.run --from-json .cache/draft-issue-latest.json`
+   - Update the static archive, generate share snippets, create a Beehiiv draft
+   - Commit & push the archive update
+4. Open Beehiiv → review → hit **Send**.
+5. Paste the 3 share snippets (X/LinkedIn/Reddit) from `.cache/share-*.md`.
+
+## Mode 2 — Fully automated cron (backstop)
+
+GitHub Actions runs at 06:30 UTC daily, uses Gemini/Groq free tier to rewrite,
+and creates a Beehiiv draft. You get a notification, open Beehiiv, hit Send.
+
+Useful when you're away or don't want to write that day. Requires the `GEMINI_API_KEY`
+and `GROQ_API_KEY` secrets (both free). Without them, it falls back to extractive
+summarization — still ships, slightly drier copy.
 
 **Want true zero-touch?** Beehiiv supports scheduled auto-send from drafts; you
 can also change `"status": "draft"` to `"status": "confirmed"` in
@@ -75,14 +102,19 @@ can also change `"status": "draft"` to `"status": "confirmed"` in
 ```bash
 pip install -r requirements.txt
 
-# Dry run — scrapes, rewrites, writes a preview HTML to .cache/, no publish
+# Collect-only: scrape + rank + write draft JSON you (or Claude) can edit
+python -m pipeline.run --collect-only
+# → writes .cache/draft-issue-latest.json
+
+# Publish from an edited draft (skip scraping + rewriting)
+python -m pipeline.run --from-json .cache/draft-issue-latest.json --dry-run
+
+# Fully automated dry run (uses free-tier LLMs or extractive fallback)
 python -m pipeline.run --dry-run
 
-# Full run — requires env vars set (same 4 as above)
+# Full automated run — requires Beehiiv env vars
 export BEEHIIV_API_KEY=...
 export BEEHIIV_PUBLICATION_ID=...
-export GEMINI_API_KEY=...
-export GROQ_API_KEY=...
 python -m pipeline.run
 ```
 
@@ -140,7 +172,8 @@ No code changes needed for tuning.
 │   │   └── render.py               # static archive → GitHub Pages
 │   └── social/
 │       └── snippets.py             # X/LinkedIn/Reddit share text
-├── tests/                          # pytest suite (32 tests)
+├── CLAUDE.md                       # session playbook for Claude Code
+├── tests/                          # pytest suite (36 tests)
 ├── requirements.txt
 └── README.md
 ```
