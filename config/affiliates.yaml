@@ -8,6 +8,14 @@
 #
 # Tip: most affiliate programs are free to join and pay 20-30% recurring.
 
+# --- UTM tracking (applies to EVERY outbound link, not just affiliate hosts)
+# Keeps enabled=true. You'll see `utm_source=newsletter&utm_medium=email&
+# utm_campaign=ai-pulse-YYYY-MM-DD` on every link in every issue. Beehiiv
+# analytics + any external analytics tool (GA4, Plausible, etc.) pick these
+# up automatically.
+utm:
+  enabled: true
+
 programs:
   # Examples — replace with your real codes once you've signed up.
   # - host: perplexity.ai
