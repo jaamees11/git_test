@@ -20,33 +20,60 @@ Beehiiv, social platforms, or your Stripe product descriptions. No code.
 
 4. **[`30-DAY-PLAYBOOK.md`](./30-DAY-PLAYBOOK.md)** — day-by-day growth
    plan. The single most important file for preventing launch momentum
-   stall. Print it; cross off by hand.
-5. **[`launch/LAUNCH-X-THREAD.md`](./launch/LAUNCH-X-THREAD.md)** — 8-tweet
+   stall.
+5. **[`SOCIAL-CALENDAR-30-DAYS.md`](./SOCIAL-CALENDAR-30-DAYS.md)** —
+   paste-ready X + LinkedIn posts for every day of the first month. Pairs
+   with the playbook.
+6. **[`FIRST-100-OUTREACH.md`](./FIRST-100-OUTREACH.md)** — DM/text scripts
+   for asking friends, family, and colleagues to subscribe. 80% conversion.
+7. **[`launch/LAUNCH-X-THREAD.md`](./launch/LAUNCH-X-THREAD.md)** — 8-tweet
    launch thread, pin on day 1.
-6. **[`launch/LAUNCH-LINKEDIN.md`](./launch/LAUNCH-LINKEDIN.md)** — LinkedIn
+8. **[`launch/LAUNCH-LINKEDIN.md`](./launch/LAUNCH-LINKEDIN.md)** — LinkedIn
    launch post + two variants for follow-ups.
-7. **[`launch/LAUNCH-REDDIT.md`](./launch/LAUNCH-REDDIT.md)** — Reddit
+9. **[`launch/LAUNCH-REDDIT.md`](./launch/LAUNCH-REDDIT.md)** — Reddit
    strategy with which subs, what to post, what to avoid (no bans).
-8. **[`launch/BOOST-OUTREACH.md`](./launch/BOOST-OUTREACH.md)** — DM + email
-   templates for cross-promo swaps with other newsletter creators.
+10. **[`launch/BOOST-OUTREACH.md`](./launch/BOOST-OUTREACH.md)** — DM + email
+    templates for cross-promo swaps with other newsletter creators.
 
-### 💎 Content runway (ready to ship, weeks 1–5)
+### 💎 Content runway (first 3 months written)
 
-9. **[`PROMPT-PACK-WEEK-1.md`](./PROMPT-PACK-WEEK-1.md)** — Inbox Triage.
-10. **[`PROMPT-PACK-WEEK-2.md`](./PROMPT-PACK-WEEK-2.md)** — Meeting Alchemy.
-11. **[`PROMPT-PACK-WEEK-3.md`](./PROMPT-PACK-WEEK-3.md)** — Deep Research.
-12. **[`PROMPT-PACK-WEEK-4.md`](./PROMPT-PACK-WEEK-4.md)** — Writing on Rails.
-13. **[`AI-STACK-FOR-PMS.md`](./AI-STACK-FOR-PMS.md)** — first quarterly
-    paid-tier deep-dive (month 2 bonus).
+11. **[`PROMPT-PACK-WEEK-1.md`](./PROMPT-PACK-WEEK-1.md)** — Inbox Triage.
+12. **[`PROMPT-PACK-WEEK-2.md`](./PROMPT-PACK-WEEK-2.md)** — Meeting Alchemy.
+13. **[`PROMPT-PACK-WEEK-3.md`](./PROMPT-PACK-WEEK-3.md)** — Deep Research.
+14. **[`PROMPT-PACK-WEEK-4.md`](./PROMPT-PACK-WEEK-4.md)** — Writing on Rails.
+15. **[`PROMPT-PACK-WEEK-5.md`](./PROMPT-PACK-WEEK-5.md)** — Code Review.
+    Completes the 5-theme rotation.
+16. **[`AI-STACK-FOR-PMS.md`](./AI-STACK-FOR-PMS.md)** — first quarterly
+    paid-tier deep-dive (Q1 bonus).
+17. **[`AI-STACK-FOR-FOUNDERS.md`](./AI-STACK-FOR-FOUNDERS.md)** — second
+    quarterly paid-tier deep-dive (Q2 bonus).
+18. **[`12-WEEK-EDITORIAL-CALENDAR.md`](./12-WEEK-EDITORIAL-CALENDAR.md)** —
+    quarterly editorial plan so you always know what's next.
 
 ### 📈 Growth levers (ship when ready)
 
-14. **[`LEAD-MAGNET.md`](./LEAD-MAGNET.md)** — "AI Tools Master List 2026"
+19. **[`LEAD-MAGNET.md`](./LEAD-MAGNET.md)** — "AI Tools Master List 2026"
     — the gated signup asset you share on social.
-15. **[`PAID-TIER-LAUNCH.md`](./PAID-TIER-LAUNCH.md)** — email to send when
+20. **[`PAID-TIER-LAUNCH.md`](./PAID-TIER-LAUNCH.md)** — email to send when
     you flip on paid subscriptions (~500 subs from now).
-16. **[`COMPETITIVE-LANDSCAPE.md`](./COMPETITIVE-LANDSCAPE.md)** — market
+21. **[`COMPETITIVE-LANDSCAPE.md`](./COMPETITIVE-LANDSCAPE.md)** — market
     benchmarks, pricing conventions, realistic revenue trajectories.
+
+---
+
+## Slash commands in Claude Code
+
+Type these in any Claude Code session from this repo:
+
+| Command | What I do |
+|---|---|
+| `/new-issue` | Run the full daily issue flow: scrape → rewrite → publish draft |
+| `/prompt-pack` | Ship this week's Prompt Pack (Fridays) |
+| `/test-run` | Smoke-test the pipeline (dry run, no Beehiiv post) |
+| `/growth-check` | Compare your current numbers to the 30-day playbook |
+| `/social-kit` | Generate today's X/LinkedIn/Reddit posts |
+
+Commands live in `.claude/commands/*.md`. Edit them to change what I do.
 
 ---
 
@@ -60,17 +87,18 @@ for ~70% of the gap between newsletters that succeed and newsletters that
 plateau.** Most newsletters don't die because the content is bad — they
 die because momentum stalls by day 7 and never returns.
 
-So I front-loaded everything you need to hit days 1–30 hard:
-- A launch thread that's been pressure-tested copy (X, LI, Reddit, DMs)
-- A day-by-day 30-day playbook so you never have to ask "what do I do today?"
-- 4 weeks of Prompt Packs + 1 role-specific deep-dive (~5 weeks of content
-  already written, so your Fridays are handled)
-- Growth infrastructure (UTM tracking, cross-promo templates, Reddit
-  strategy) so every channel you touch is instrumented
+So I front-loaded everything you need:
+- **The launch blast kit** (X thread, LinkedIn post, Reddit strategy, friends-&-family scripts)
+- **A day-by-day playbook** so "what do I do today" is never a question
+- **30 days of social content** already written — pair it with the playbook
+- **5 Prompt Packs** + **2 role-specific deep-dives** = ~12 weeks of Friday content ready
+- **A 12-week editorial calendar** showing the interplay between daily, weekly, monthly, and quarterly
+- **Growth infrastructure** (UTM tracking, cross-promo templates, slash commands) so every channel is instrumented
 
-If this all gets executed, realistic day-30 outcome: **150–400 subs,
-55–70% open rate, 5–10 creator-network relationships, 4+ weeks of
-content still in the reservoir.**
+Realistic day-30 outcome if you execute: **150–400 subs, 55–70% open rate,
+5–10 creator-network relationships, 12+ weeks of content reservoir.**
+
+---
 
 ## Not in this folder (but worth knowing about)
 
@@ -80,7 +108,8 @@ content still in the reservoir.**
   and UTM tracking (now auto-applied to every outbound link)
 - **Session playbook:** `../CLAUDE.md` — what any Claude Code session does
   when you say "ship the issue"
-- **README:** `../README.md` — full repo docs including both run modes
+- **Slash commands:** `../.claude/commands/` — the five slash commands above
+- **Main README:** `../README.md` — full repo docs including both run modes
 
 ## Voice tweaks
 
