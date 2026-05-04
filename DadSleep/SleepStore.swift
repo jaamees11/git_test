@@ -48,6 +48,41 @@ final class SleepStore: ObservableObject {
 
     var lastEntry: SleepEntry? { entries.last }
 
+    /// Average sleep duration across the most recent up-to-7 entries.
+    var weeklyAverage: TimeInterval? {
+        let recent = Array(entries.suffix(7))
+        guard !recent.isEmpty else { return nil }
+        let total = recent.reduce(0.0) { $0 + $1.duration }
+        return total / Double(recent.count)
+    }
+
+    var weeklyAverageString: String {
+        guard let avg = weeklyAverage else { return "—" }
+        let total = Int(avg)
+        return "\(total / 3600)h \((total % 3600) / 60)m"
+    }
+
+    /// Number of consecutive calendar days (counting back from today or the
+    /// most recent entry) that have at least one logged sleep.
+    var currentStreak: Int {
+        guard !entries.isEmpty else { return 0 }
+        let cal = Calendar.current
+        let loggedDays: Set<Date> = Set(entries.map { cal.startOfDay(for: $0.start) })
+        var streak = 0
+        var day = cal.startOfDay(for: Date())
+        // If today isn't logged yet, start counting from yesterday so the
+        // streak doesn't reset just because he hasn't slept yet today.
+        if !loggedDays.contains(day) {
+            day = cal.date(byAdding: .day, value: -1, to: day) ?? day
+        }
+        while loggedDays.contains(day) {
+            streak += 1
+            guard let prev = cal.date(byAdding: .day, value: -1, to: day) else { break }
+            day = prev
+        }
+        return streak
+    }
+
     func startSleeping() {
         guard inProgressStart == nil else { return }
         inProgressStart = Date()

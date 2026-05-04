@@ -42,6 +42,9 @@ struct SoundsView: View {
                     SoundTile(sound: sound, isPlaying: engine.playing == sound)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(sound.label)
+                .accessibilityValue(engine.playing == sound ? "playing" : "paused")
+                .accessibilityHint("Double tap to \(engine.playing == sound ? "stop" : "play") \(sound.label.lowercased())")
             }
         }
     }
@@ -65,6 +68,8 @@ struct SoundsView: View {
                     set: { engine.volume = Float($0) }
                 ), in: 0...1)
                 .tint(Theme.accent)
+                .accessibilityLabel("Volume")
+                .accessibilityValue("\(Int(engine.volume * 100)) percent")
                 Image(systemName: "speaker.wave.3.fill")
                     .foregroundColor(.white.opacity(0.5))
             }
@@ -106,6 +111,7 @@ struct SoundsView: View {
                             )
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel(mins == 0 ? "Fade off" : "Fade out after \(mins) minutes")
                 }
             }
             if engine.fadeRemaining > 0 {
@@ -126,6 +132,14 @@ struct SoundsView: View {
         return "\(s)s"
     }
 }
+
+#if DEBUG
+#Preview {
+    NavigationStack { SoundsView() }
+        .environmentObject(NoiseEngine())
+        .preferredColorScheme(.dark)
+}
+#endif
 
 private struct SoundTile: View {
     let sound: NoiseEngine.Sound

@@ -43,6 +43,7 @@ struct TrackerView: View {
             VStack(spacing: 10) {
                 Image(systemName: "bed.double.fill")
                     .font(.system(size: 44))
+                    .accessibilityHidden(true)
                 Text("Going to sleep")
                     .font(.title2.bold())
                 Text("Tap when you're ready for bed")
@@ -58,6 +59,8 @@ struct TrackerView: View {
             )
         }
         .buttonStyle(.plain)
+        .accessibilityLabel("Start tracking sleep")
+        .accessibilityHint("Tap when you're ready for bed")
     }
 
     private func inProgressView(start: Date) -> some View {
@@ -83,10 +86,12 @@ struct TrackerView: View {
             }
             .buttonStyle(.plain)
             .padding(.top, 8)
+            .accessibilityLabel("I am awake. Stop tracking and save this sleep.")
 
             Button("Cancel") { store.cancelInProgress() }
                 .font(.subheadline)
                 .foregroundColor(.white.opacity(0.6))
+                .accessibilityHint("Discard the in-progress sleep without saving.")
         }
         .glassCard(padding: 28)
     }
@@ -112,6 +117,8 @@ struct TrackerView: View {
                         .foregroundColor(Theme.accent)
                 }
                 .padding(.vertical, 8)
+                .accessibilityElement(children: .combine)
+                .accessibilityLabel("\(entry.dateString): \(entry.durationString), from \(entry.startString) to \(entry.endString).")
                 if entry.id != store.entries.first?.id {
                     Divider().background(Color.white.opacity(0.08))
                 }
@@ -140,3 +147,11 @@ struct TrackerView: View {
         ticker = nil
     }
 }
+
+#if DEBUG
+#Preview {
+    NavigationStack { TrackerView() }
+        .environmentObject(SleepStore())
+        .preferredColorScheme(.dark)
+}
+#endif

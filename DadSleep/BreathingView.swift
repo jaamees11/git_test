@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct BreathingView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
     @State private var phase: Phase = .ready
     @State private var cycleCount: Int = 0
     @State private var task: Task<Void, Never>?
@@ -45,6 +47,8 @@ struct BreathingView: View {
                     .font(.title.weight(.semibold))
                     .foregroundColor(.white)
                     .frame(height: 40)
+                    .accessibilityLabel(phase.label)
+                    .accessibilityAddTraits(.updatesFrequently)
 
                 breathingCircle
                     .frame(height: 320)
@@ -93,11 +97,14 @@ struct BreathingView: View {
                     )
                 )
                 .frame(width: 280, height: 280)
-                .scaleEffect(scale)
+                .scaleEffect(reduceMotion ? 0.85 : scale)
                 .animation(
-                    .easeInOut(duration: phase.seconds > 0 ? phase.seconds : 0.4),
+                    reduceMotion
+                        ? nil
+                        : .easeInOut(duration: phase.seconds > 0 ? phase.seconds : 0.4),
                     value: scale
                 )
+                .accessibilityHidden(true)
         }
     }
 
@@ -137,3 +144,10 @@ struct BreathingView: View {
         }
     }
 }
+
+#if DEBUG
+#Preview {
+    NavigationStack { BreathingView() }
+        .preferredColorScheme(.dark)
+}
+#endif
